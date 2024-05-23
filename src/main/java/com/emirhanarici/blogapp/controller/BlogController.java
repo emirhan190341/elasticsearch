@@ -47,6 +47,15 @@ public class BlogController {
         return ResponseEntity.ok(blogService.searchBlogByTitleAndCategory(title, category));
     }
 
+    @GetMapping("/boolQuery")
+    public ResponseEntity<List<Blog>> boolQuery(@RequestBody SearchDtoRequest dto) {
+        log.info("Request to search blog by field and value: {}", dto);
+
+        return ResponseEntity.ok(blogService.boolQuery(dto));
+    }
+
+
+
 
 }
 

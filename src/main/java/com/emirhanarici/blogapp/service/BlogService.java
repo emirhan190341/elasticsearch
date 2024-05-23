@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -47,7 +48,6 @@ public class BlogService {
     }
 
 
-
     public List<Blog> searchBlogByFieldAndValue(SearchDtoRequest dto) {
         SearchResponse<Blog> response = null;
         try {
@@ -71,6 +71,28 @@ public class BlogService {
     }
 
 
+    public List<Blog> searchBlogByTitleAndCategory(String title, String category) {
+        return blogRepository.searchByTitleAndCategory(title, category);
+    }
+
+    public List<Blog> boolQuery(SearchDtoRequest dto) {
+        try {
+            var supplier = ESUtil.createBoolQuery(dto);
+
+            log.info("Elasticsearch query: " + supplier.get().toString());
+
+            SearchResponse<Blog> response = elasticsearchClient.search(q ->
+                    q.index("blogs_index").query(supplier.get()), Blog.class);
+
+            log.info("Elasticsearch response: {}", response.toString());
+
+            return extractItemsFromResponse(response);
+        } catch (IOException e) {
+            return Collections.emptyList();
+        }
+    }
+
+
     public List<Blog> extractItemsFromResponse(SearchResponse<Blog> response) {
         return response
                 .hits()
@@ -81,7 +103,4 @@ public class BlogService {
     }
 
 
-    public List<Blog> searchBlogByTitleAndCategory(String title, String category) {
-        return blogRepository.searchByTitleAndCategory(title, category);
-    }
 }
