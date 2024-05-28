@@ -41,7 +41,8 @@ public class BlogController {
     }
 
     @GetMapping("/search/{title}/{category}")
-    public ResponseEntity<List<Blog>> searchByTitleAndCategory(@PathVariable String title, @PathVariable String category) {
+    public ResponseEntity<List<Blog>> searchByTitleAndCategory(@PathVariable String title,
+                                                               @PathVariable String category) {
         log.info("Request to search blog by title and category: {} {}", title, category);
 
         return ResponseEntity.ok(blogService.searchBlogByTitleAndCategory(title, category));
@@ -53,8 +54,6 @@ public class BlogController {
 
         return ResponseEntity.ok(blogService.boolQuery(dto));
     }
-
-
 
 
 }

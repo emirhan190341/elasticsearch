@@ -1,11 +1,9 @@
 package com.emirhanarici.blogapp.util;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.*;
-import co.elastic.clients.util.ObjectBuilder;
 import com.emirhanarici.blogapp.dto.SearchDtoRequest;
 import lombok.experimental.UtilityClass;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 @UtilityClass
@@ -41,15 +39,14 @@ public class ESUtil {
                 .build();
     }
 
-    //Birebir eşleşme
+
     private static Query termQuery(String key, String value) {
         return Query.of(q -> q.term(new TermQuery.Builder().field(key).value(value).build()));
     }
 
-    //Arama yapma
+
     private static Query matchQuery(String key, String value) {
         return Query.of(q -> q.match(new MatchQuery.Builder().field(key).query(value).build()));
     }
-
 
 }
